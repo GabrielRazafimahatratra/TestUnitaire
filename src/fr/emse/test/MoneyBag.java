@@ -17,17 +17,25 @@ class MoneyBag implements IMoney{
     
     private void appendMoney(Money m) {
         if (fMonies.isEmpty()) {
-            fMonies.add(m);
+            if (m.amount() != 0) {
+                fMonies.add(m);
+            }
         } else {
             int i = 0;
-            while ((i < fMonies.size()) && 
+            while ((i < fMonies.size()) &&
                    (!(fMonies.get(i).currency().equals(m.currency()))))
                 i++;
             if (i >= fMonies.size()) {
-                fMonies.add(m);
+                if (m.amount() != 0) {
+                    fMonies.add(m);
+                }
             } else {
-                fMonies.set(i, new Money(fMonies.get(i).amount() + 
-                                       m.amount(), m.currency()));
+                int newAmount = fMonies.get(i).amount() + m.amount();
+                if (newAmount == 0) {
+                    fMonies.remove(i);
+                } else {
+                    fMonies.set(i, new Money(newAmount, m.currency()));
+                }
             }
         }
     }
@@ -55,15 +63,22 @@ class MoneyBag implements IMoney{
         MoneyBag result = new MoneyBag(new Money[0]);
         result.fMonies.addAll(this.fMonies);
         result.appendMoney(m);
-        return result;
+        return result.simplify();
     }
-    
+
     public IMoney addMoneyBag(MoneyBag s) {
         MoneyBag result = new MoneyBag(new Money[0]);
         result.fMonies.addAll(this.fMonies);
         for (Money money : s.fMonies) {
             result.appendMoney(money);
         }
-        return result;
+        return result.simplify();
+    }
+    
+    public IMoney simplify() {
+        if (fMonies.size() == 1) {
+            return fMonies.get(0);
+        }
+        return this;
     }
 }

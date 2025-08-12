@@ -16,12 +16,12 @@ class MoneyTest {
 
     @BeforeEach
     public void setUp() {
-        // Variables pour testSimpleAdd et testEquals
+ 
         m12CHF = new Money(12, "CHF");
         m14CHF = new Money(14, "CHF");
         expected = new Money(26, "CHF");
         
-        // Variables pour les tests d'intégration
+       
         f12CHF = new Money(12, "CHF");
         f14CHF = new Money(14, "CHF");
         f7USD = new Money(7, "USD");
@@ -76,5 +76,14 @@ class MoneyTest {
         assertEquals(expectedBag, fMB1.add(fMB2));
     }
     
+    
+    @Test
+    public void testSimplify() {
+        // {[12 CHF][7 USD]} + [-12 CHF] should simplify to [7 USD]
+        MoneyBag bag = new MoneyBag(f12CHF, f7USD);
+        Money negativeF12CHF = new Money(-12, "CHF");
+        IMoney result = bag.add(negativeF12CHF);
+        assertEquals(f7USD, result);
+    }
 
 }
