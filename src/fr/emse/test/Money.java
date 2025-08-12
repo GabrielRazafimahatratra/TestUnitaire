@@ -31,9 +31,5 @@ public class Money {
         return fAmount == other.fAmount && fCurrency.equals(other.fCurrency);
     }
     
-    @Override
-    public int hashCode() {
-        return Objects.hash(fAmount, fCurrency);
-    }
 
 }
