@@ -2,7 +2,7 @@ package fr.emse.test;
 
 import java.util.Vector;
 
-class MoneyBag {
+class MoneyBag implements IMoney{
     private Vector<Money> fMonies = new Vector<Money>();
     
     MoneyBag(Money m1, Money m2) {
@@ -44,5 +44,26 @@ class MoneyBag {
             if (!moneyBag.fMonies.contains(money)) return false;
         }
         return true;
+    }
+    
+    
+    public IMoney add(IMoney m) {
+        return m.addMoneyBag(this);
+    }
+    
+    public IMoney addMoney(Money m) {
+        MoneyBag result = new MoneyBag(new Money[0]);
+        result.fMonies.addAll(this.fMonies);
+        result.appendMoney(m);
+        return result;
+    }
+    
+    public IMoney addMoneyBag(MoneyBag s) {
+        MoneyBag result = new MoneyBag(new Money[0]);
+        result.fMonies.addAll(this.fMonies);
+        for (Money money : s.fMonies) {
+            result.appendMoney(money);
+        }
+        return result;
     }
 }
